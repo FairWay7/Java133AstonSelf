@@ -1,0 +1,7 @@
+2026-03-08 22:16:28.263 [main] WARN  org.hibernate.orm.connections.pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2026-03-08 22:16:28.514 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-08 22:16:43.777 [main] INFO  org.example.hm2.dao.UserDAOImpl - User is saved: Андрей
+2026-03-08 22:16:43.778 [main] INFO  org.example.hm2.service.UserServiceImpl - User created successfully with id: 5
+2026-03-08 22:16:56.794 [main] INFO  org.example.hm2.dao.UserDAOImpl - User deleted successfully by id: 5
+2026-03-08 22:16:56.799 [main] INFO  org.example.hm2.service.UserServiceImpl - User deleted successfully with id: 5
+2026-03-08 22:17:00.826 [main] WARN  org.example.hm2.service.UserServiceImpl - User not found with id: 55
