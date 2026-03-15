@@ -23,12 +23,29 @@ public class UserServiceImpl implements UserService {
         this.userDAO = new UserDAOImpl();
     }
 
+    public UserServiceImpl(UserDAO userDao) {
+        this.userDAO = userDao;
+    }
+
     @Override
     public UserResponseDTO createUser(UserRequestDTO request) throws DuplicateEmailException {
+        if (request.username() == null || request.username().trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid username format");
+        }
+
+        if (request.age() < 8 || request.age() > 120) {
+            throw new IllegalArgumentException("Invalid age format");
+        }
+
+        if (request.email() == null || request.email().trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+
         if(userDAO.getByEmail(request.email()).isPresent()) {
             logger.warn("Attempt to create user with existing email: {}", request.email());
             throw new DuplicateEmailException("Email already exists: " + request.email());
         }
+
         Optional<User> savedUser = userDAO.create(request.toEntity());
         logger.info("User created successfully with id: {}", savedUser.get().getId());
         return UserResponseDTO.fromEntity(savedUser.get());

@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
             transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
-                logger.info("User is saved: {}", user.getUsername());
+            logger.info("User is saved: {}", user.getUsername());
             return Optional.of(user);
         }
         catch (Exception e) {

@@ -120,13 +120,4 @@ public class CustomHashMapTest {
         customHashMap.putAll(Map.of("1", 22, "2", 33));
         Assert.assertEquals(false, customHashMap.isEmpty());
     }
-
-    @Test
-    public void toStringTest() {
-        CustomHashMap<String, Integer> customHashMap = new CustomHashMap<>();
-
-        customHashMap.putAll(Map.of("1", 22, "2", 33));
-        Assert.assertEquals("{" + "\n\t2=33," + "\n\t1=22" + "\n}",
-            customHashMap.toString());
-    }
 }

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class HibernateUtil {
     private static final Logger logger = LogManager.getLogger(HibernateUtil.class);
-    private static final SessionFactory sessionFactory = buildSessionFactory();
+    private static SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
         try {
@@ -25,5 +25,9 @@ public class HibernateUtil {
     public static void shutdown() {
         logger.info("Closing SessionFactory");
         sessionFactory.close();
+    }
+
+    public static void setSessionFactory(SessionFactory factory) {
+        sessionFactory = factory;
     }
 }

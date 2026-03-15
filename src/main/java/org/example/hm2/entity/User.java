@@ -11,7 +11,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false, unique = true)
     private String email;
     private int age;
     private LocalDateTime created_at;
@@ -70,11 +72,5 @@ public class User {
 
     public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("User{id=%s, name='%s', email='%s', age=%d, createdAt=%s}",
-            id, username, email, age, created_at);
     }
 }
