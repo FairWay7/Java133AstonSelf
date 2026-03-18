@@ -26,8 +26,4 @@ public class HibernateUtil {
         logger.info("Closing SessionFactory");
         sessionFactory.close();
     }
-
-    public static void setSessionFactory(SessionFactory factory) {
-        sessionFactory = factory;
-    }
 }

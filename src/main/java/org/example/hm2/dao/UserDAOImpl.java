@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.example.hm2.entity.User;
 import org.example.hm2.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
@@ -16,12 +17,21 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDAOImpl implements UserDAO {
+    private final SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
+
+    public UserDAOImpl() {
+        this.sessionFactory = HibernateUtil.getSessionFactory();
+    }
+
+    public UserDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Optional<User> create(User user) {
         Transaction transaction = null;
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try(Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
@@ -33,13 +43,13 @@ public class UserDAOImpl implements UserDAO {
                 transaction.rollback();
             }
             logger.error("Error saving user: {}", e.getMessage());
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override
     public List<User> findAll() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<User> cq = cb.createQuery(User.class);
             Root<User> rootEntry = cq.from(User.class);
@@ -55,7 +65,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Optional<User> getById(Long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, id);
             return Optional.ofNullable(user);
         }
@@ -67,7 +77,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Optional<User> getByEmail(String email) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("FROM User WHERE email = :email", User.class);
             query.setParameter("email", email);
             return query.uniqueResultOptional();
@@ -80,7 +90,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Optional<User> getByUsername(String username) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("FROM User WHERE username LIKE :username", User.class);
             query.setParameter("username", username);
             return query.uniqueResultOptional();
@@ -94,7 +104,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public Optional<User> update(User user) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.update(user);
             transaction.commit();
@@ -113,7 +123,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public boolean deleteById(Long id) {
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             User user = session.get(User.class, id);
             if (user != null) {
