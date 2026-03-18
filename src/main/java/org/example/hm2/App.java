@@ -1,7 +1,9 @@
 package org.example.hm2;
 
 
-public class AppHomeworkTwo {
+import org.example.hm2.menu.MainMenu;
+
+public class App {
 
     public static void main( String[] args )
     {

@@ -1,4 +1,4 @@
-package org.example.hm2;
+package org.example.hm2.menu;
 
 import org.example.hm2.dto.UserRequestDTO;
 import org.example.hm2.dto.UserResponseDTO;

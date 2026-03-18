@@ -24,8 +24,7 @@
     <dependency>
       <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>6.6.42.Final</version>
-      <scope>compile</scope>
+      <version>6.5.2.Final</version>
     </dependency>
 
     <dependency>
@@ -44,12 +43,10 @@
       <artifactId>log4j-api</artifactId>
       <version>2.20.0</version>
     </dependency>
-
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>test</scope>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.17</version>
     </dependency>
 
     <dependency>
@@ -136,7 +133,6 @@
           <argLine>-javaagent:${org.mockito:mockito-core:jar} ${argLine}</argLine>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 </project>

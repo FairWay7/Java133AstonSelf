@@ -1,13 +1,10 @@
 package org.example.hm2.dao;
 
-import org.example.hm2.config.TestHibernateConfig;
 import org.example.hm2.entity.User;
-import org.example.hm2.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.*;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
+import org.hibernate.Transaction;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
@@ -16,49 +13,22 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
-public class UserDAOImplTest {
+public class UserDAOImplTest extends BaseDAOTest {
     private UserDAO userDAO;
-    private static SessionFactory sessionFactory;
-
-    @Container
-    private static final PostgreSQLContainer<?> postgres =
-        new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("testdb")
-            .withUsername("test")
-            .withPassword("test");
-
-    @BeforeAll
-    static void beforeAll() {
-        sessionFactory = TestHibernateConfig.createSessionFactory(postgres);
-        HibernateUtil.setSessionFactory(sessionFactory);
-    }
-
-    @AfterAll
-    static void afterAll() {
-//        HibernateUtil.shutdown();
-        if (sessionFactory != null) {
-            sessionFactory.close();
-        }
-    }
 
     @BeforeEach
     void setUp() {
-        userDAO = new UserDAOImpl();
-//        session = sessionFactory.openSession();
-        try (Session session = sessionFactory.openSession()) {
-            var transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM User").executeUpdate();
-            transaction.commit();
-        }
+        userDAO = new UserDAOImpl(getSessionFactory());
+        cleanup();
     }
 
-//    @AfterEach
-//    void tearDown() {
-//        if (session.getTransaction() != null && session.getTransaction().isActive()) {
-//            session.getTransaction().rollback();
-//        }
-//        session.close();
-//    }
+    private void cleanup() {
+        try (Session session = getSessionFactory().openSession()) {
+            Transaction tr = session.beginTransaction();
+            session.createQuery("DELETE FROM User").executeUpdate();
+            tr.commit();
+        }
+    }
 
     @Test
     public void createSimpleUser() {
@@ -97,6 +67,17 @@ public class UserDAOImplTest {
         assertTrue(foundUser.isPresent());
         assertEquals("IvaNova", foundUser.get().getUsername());
         assertEquals("ivanova@g.ru", foundUser.get().getEmail());
+    }
+
+    @Test
+    public void findByEmailNonExistingUser() {
+        userDAO.create(new User("IvaNova", "ivanova@g.ru", 30));
+
+        Optional<User> foundUser = userDAO.getByEmail("ivanova@g");
+        assertFalse(foundUser.isPresent());
+
+        Optional<User> foundUser1 = userDAO.getByEmail("ivanova@g.ru");
+        assertTrue(foundUser1.isPresent());
     }
 
     @Test
