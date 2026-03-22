@@ -1,6 +1,6 @@
-package org.example.webapp.repository;
+package org.example.repository;
 
-import org.example.webapp.model.entity.User;
+import org.example.model.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

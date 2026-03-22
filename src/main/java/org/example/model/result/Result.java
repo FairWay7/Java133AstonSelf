@@ -1,4 +1,4 @@
-package org.example.webapp.model.result;
+package org.example.model.result;
 
 import java.util.Collections;
 import java.util.List;

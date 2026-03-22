@@ -1,4 +1,4 @@
-package org.example.webapp;
+package org.example;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
@@ -17,7 +17,7 @@ public class App {
         tomcat.getConnector();
 
         Context context = tomcat.addWebapp("",
-            new File("src/main/java/org/example/webapp").getAbsolutePath()
+            new File("src/main/java/org/example").getAbsolutePath()
         );
 
         ((StandardJarScanner) context.getJarScanner()).setScanManifest(false);

@@ -1,4 +1,4 @@
-package org.example.webapp.model.entity;
+package org.example.model.entity;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;

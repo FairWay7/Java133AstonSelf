@@ -1,4 +1,4 @@
-package org.example.webapp.exception;
+package org.example.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {

@@ -1,4 +1,4 @@
-package org.example.webapp.config;
+package org.example.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -18,7 +18,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "org.example.webapp.repository")
+@EnableJpaRepositories(basePackages = "org.example.repository")
 @PropertySource("classpath:database.properties")
 public class DatabaseConfig {
     @Value("${db.driver}")

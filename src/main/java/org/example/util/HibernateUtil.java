@@ -1,4 +1,4 @@
-package org.example.webapp.util;
+package org.example.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

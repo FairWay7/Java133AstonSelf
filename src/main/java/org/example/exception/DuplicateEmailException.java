@@ -1,4 +1,4 @@
-package org.example.webapp.exception;
+package org.example.exception;
 
 public class DuplicateEmailException extends RuntimeException {
     public DuplicateEmailException(String message) {

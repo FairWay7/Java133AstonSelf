@@ -1,13 +1,12 @@
-package org.example.webapp.controller;
+package org.example.controller;
 
-import org.example.webapp.exception.UserCreateException;
-import org.example.webapp.exception.UserNotFoundException;
-import org.example.webapp.model.dto.UserRequestDTO;
-import org.example.webapp.model.dto.UserResponseDTO;
-import org.example.webapp.model.dto.UserUpdateRequestDTO;
-import org.example.webapp.model.entity.User;
-import org.example.webapp.model.result.Result;
-import org.example.webapp.service.UserService;
+import org.example.exception.UserCreateException;
+import org.example.exception.UserNotFoundException;
+import org.example.model.dto.UserRequestDTO;
+import org.example.model.dto.UserResponseDTO;
+import org.example.model.dto.UserUpdateRequestDTO;
+import org.example.model.result.Result;
+import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -17,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserControllerImpl implements  UserController {
+public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     public UserControllerImpl(UserService userService) {

@@ -1,4 +1,4 @@
-package org.example.webapp;
+package org.example;
 
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;

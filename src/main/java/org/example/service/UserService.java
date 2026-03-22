@@ -1,15 +1,15 @@
-package org.example.webapp.service;
+package org.example.service;
 
-import org.example.webapp.model.dto.UserRequestDTO;
-import org.example.webapp.model.dto.UserResponseDTO;
-import org.example.webapp.model.dto.UserUpdateRequestDTO;
-import org.example.webapp.exception.DuplicateEmailException;
-import org.example.webapp.model.result.Result;
+import org.example.model.dto.UserRequestDTO;
+import org.example.model.dto.UserResponseDTO;
+import org.example.model.dto.UserUpdateRequestDTO;
+import org.example.exception.DuplicateEmailException;
+import org.example.model.result.Result;
 
 import java.util.List;
 
 public interface UserService {
-    Result<UserResponseDTO> createUser(UserRequestDTO request) throws DuplicateEmailException;
+    Result<UserResponseDTO> createUser(UserRequestDTO request);
     Result<List<UserResponseDTO>> getAllUsers();
     Result<UserResponseDTO> getUserById(Long id);
     Result<UserResponseDTO> getUsersByEmail(String email);

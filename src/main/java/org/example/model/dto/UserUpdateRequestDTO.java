@@ -1,6 +1,6 @@
-package org.example.webapp.model.dto;
+package org.example.model.dto;
 
-import org.example.webapp.model.entity.User;
+import org.example.model.entity.User;
 
 public record UserUpdateRequestDTO(
     Long id,

@@ -1,17 +1,13 @@
-package org.example.webapp.service;
+package org.example.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.webapp.dao.UserDAO;
-import org.example.webapp.dao.UserDAOImpl;
-import org.example.webapp.model.dto.UserRequestDTO;
-import org.example.webapp.model.dto.UserResponseDTO;
-import org.example.webapp.model.dto.UserUpdateRequestDTO;
-import org.example.webapp.model.entity.User;
-import org.example.webapp.exception.DuplicateEmailException;
-import org.example.webapp.exception.UserNotFoundException;
-import org.example.webapp.model.result.Result;
-import org.example.webapp.repository.UserRepository;
+import org.example.model.dto.UserRequestDTO;
+import org.example.model.dto.UserResponseDTO;
+import org.example.model.dto.UserUpdateRequestDTO;
+import org.example.model.entity.User;
+import org.example.model.result.Result;
+import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,12 +43,9 @@ public class UserServiceImpl implements UserService {
             errors.add("Invalid email format");
         }
 
-        if(userRepository.findByEmail(request.email()).isPresent()) {
+        if(userRepository.existsByEmail(request.email())) {
             logger.warn("Attempt to create user with existing email: {}", request.email());
             errors.add("Email already exists: " + request.email());
-        }
-
-        if(!errors.isEmpty()) {
             return Result.failure(errors);
         }
 
