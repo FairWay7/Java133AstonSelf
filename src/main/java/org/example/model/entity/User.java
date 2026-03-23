@@ -1,7 +1,6 @@
 package org.example.model.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
@@ -11,14 +10,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String username;
+
     @Column(nullable = false, unique = true)
     private String email;
+
     private int age;
     private LocalDateTime created_at;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String username, String email, Integer age) {
         this.username = username;

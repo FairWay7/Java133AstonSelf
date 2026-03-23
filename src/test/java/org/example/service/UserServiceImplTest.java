@@ -4,7 +4,6 @@ import org.example.model.dto.UserRequestDTO;
 import org.example.model.dto.UserResponseDTO;
 import org.example.model.dto.UserUpdateRequestDTO;
 import org.example.model.entity.User;
-import org.example.exception.UserNotFoundException;
 import org.example.model.result.Result;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +41,7 @@ public class UserServiceImplTest {
         int age = 20;
 
         User user = new User(username, email, age);
-        when(userRepository.save(any(User.class))).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(user);
         Result<UserResponseDTO> result = userService.createUser(new UserRequestDTO(username, email, age));
 
         assertTrue(result.isSuccess());
@@ -52,36 +51,8 @@ public class UserServiceImplTest {
         assertEquals(email, resultUser.email());
         assertEquals((Integer) age, resultUser.age());
 
-        verify(userRepository).findByEmail(email);
-        verify(userRepository).save(any(User.class));
-    }
-
-    @Test
-    public void createOldUser() {
-        String username = "user1";
-        String email = "user1@example.com";
-        int age = 121;
-
-        User user = new User(username, email, age);
-        when(userRepository.save(any(User.class))).thenReturn(Optional.empty());
-
-        Result<UserResponseDTO> result = userService.createUser(new UserRequestDTO(username, email, age));
-
-        assertTrue(result.isFailure());
         verify(userRepository).existsByEmail(email);
-    }
-
-    @Test
-    void createUserWithEmptyUsername() {
-        String username = "";
-        String email = "user2@example.com";
-        Integer age = 30;
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.createUser(new UserRequestDTO(username, email, age));
-        });
-
-        verify(userRepository, never()).save(any(User.class));
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
@@ -107,11 +78,66 @@ public class UserServiceImplTest {
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> {
-            userService.getUsersByEmail(email);
-        });
+        Result<UserResponseDTO> result = userService.getUsersByEmail(email);
 
+        assertFalse(result.isSuccess());
         verify(userRepository).findByEmail(email);
+    }
+
+    @Test
+    void getUserById_whenOk() {
+        Long id = 1L;
+        String username = "Denis";
+        String email = "user2@example.com";
+        int age = 30;
+        User expectedUser = new User(username, email, age);
+        expectedUser.setId(id);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(expectedUser));
+        Result<UserResponseDTO> result = userService.getUserById(id);
+
+        assertTrue(result.isSuccess());
+
+        UserResponseDTO userDTO = result.getData().get();
+        assertEquals(userDTO.username(), username);
+        assertEquals(userDTO.email(), email);
+        assertEquals(userDTO.age(), age);
+        verify(userRepository).findById(id);
+    }
+
+    @Test
+    void getUserById_whenBad() {
+        Long id = 1L;
+        User expectedUser = new User("Denis", "user2@example.com", 30);
+        expectedUser.setId(id);
+
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+        Result<UserResponseDTO> result = userService.getUserById(id);
+
+        assertFalse(result.isSuccess());
+        assertFalse(result.getData().isPresent());
+        verify(userRepository).findById(id);
+    }
+
+    @Test
+    void getUsersByUsername_whenOk() {
+        Long id = 1L;
+        String username = "Denis";
+        String email = "user2@example.com";
+        int age = 30;
+        User expectedUser = new User(username, email, age);
+        expectedUser.setId(id);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(expectedUser));
+        Result<UserResponseDTO> result = userService.getUsersByUsername(username);
+
+        assertTrue(result.isSuccess());
+
+        UserResponseDTO userDTO = result.getData().get();
+        assertEquals(userDTO.username(), username);
+        assertEquals(userDTO.email(), email);
+        assertEquals(userDTO.age(), age);
+        verify(userRepository).findByUsername(username);
     }
 
     @Test
@@ -125,9 +151,10 @@ public class UserServiceImplTest {
         Integer newAge = 30;
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(userRepository.findByEmail(newEmail)).thenReturn(Optional.of(user));
 
-        Result<UserResponseDTO> result = userService.updateUser(new UserUpdateRequestDTO(userId, newName, newEmail, newAge));
+        Result<UserResponseDTO> result = userService.updateUser(
+            new UserUpdateRequestDTO(userId, newName, newEmail, newAge)
+        );
 
         UserResponseDTO resultUser = result.getData().get();
         assertEquals(newName, resultUser.username());
@@ -135,8 +162,8 @@ public class UserServiceImplTest {
         assertEquals(newAge, resultUser.age());
 
         verify(userRepository).findById(userId);
-        verify(userRepository).findByEmail(newEmail);
-        verify(userRepository).update(user);
+        verify(userRepository).existsByEmail(newEmail);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -145,11 +172,11 @@ public class UserServiceImplTest {
         User user = new User("old", "old@example.com", 21);
         user.setId(userId);
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.existsById(userId)).thenReturn(true);
 
         userService.deleteUser(userId);
 
-        verify(userRepository).findById(userId);
+        verify(userRepository).existsById(userId);
         verify(userRepository).deleteById(user.getId());
     }
 

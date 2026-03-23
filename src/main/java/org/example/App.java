@@ -29,6 +29,7 @@ public class App {
 
         tomcat.start();
         System.out.println("Server started on http://localhost:8080");
+        System.out.println("Server started on http://localhost:8080/swagger-ui/index.html");
         tomcat.getServer().await();
     }
 }

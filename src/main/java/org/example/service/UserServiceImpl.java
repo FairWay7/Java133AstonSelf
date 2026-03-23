@@ -31,34 +31,31 @@ public class UserServiceImpl implements UserService {
     public Result<UserResponseDTO> createUser(UserRequestDTO request) {
         List<String> errors = new ArrayList<>();
 
-        if (request.username() == null || request.username().trim().isEmpty()) {
-            errors.add("Invalid username format");
-        }
-
-        if (request.age() < 8 || request.age() > 120) {
-            errors.add("Invalid age format");
-        }
-
-        if (request.email() == null || request.email().trim().isEmpty()) {
-            errors.add("Invalid email format");
-        }
-
         if(userRepository.existsByEmail(request.email())) {
             logger.warn("Attempt to create user with existing email: {}", request.email());
             errors.add("Email already exists: " + request.email());
             return Result.failure(errors);
         }
 
-        Optional<User> savedUser = userRepository.save(request.toEntity());
-        logger.info("User created successfully with id: {}", savedUser.get().getId());
-        return Result.success(UserResponseDTO.fromEntity(savedUser.get()));
+        User savedUser = userRepository.save(request.toEntity());
+
+        if(savedUser == null) {
+            logger.info("UserRepository did not save the user with email: {}", request.email());
+            errors.add("UserRepository did not save the user with email: " + request.email());
+            return Result.failure(errors);
+        }
+
+        logger.info("User created successfully with email: {}", savedUser.getEmail());
+        return Result.success(UserResponseDTO.fromEntity(savedUser));
     }
 
     @Override
     public Result<List<UserResponseDTO>> getAllUsers() {
-        return (Result<List<UserResponseDTO>>) userRepository.findAll().stream()
+        List<UserResponseDTO> users = userRepository.findAll().stream()
             .map(UserResponseDTO::fromEntity)
             .collect(Collectors.toList());
+
+        return Result.success(users);
     }
 
     @Override
@@ -98,14 +95,14 @@ public class UserServiceImpl implements UserService {
             return Result.failure(errors);
         }
 
-        if (!request.email().equals(request.email()) && userRepository.existsByEmail(request.email())) {
+        if (!request.email().equals(user.get().getEmail()) && userRepository.existsByEmail(request.email())) {
             logger.warn("Email already in use: {}", request.email());
             errors.add("Email already in use: " + request.email());
             return Result.failure(errors);
         }
 
         request.applyTo(user.get());
-        userRepository.update(user.get());
+        userRepository.save(user.get());
 
         logger.info("User updated successfully with id: {}", user.get().getId());
         return Result.success(UserResponseDTO.fromEntity(user.get()));

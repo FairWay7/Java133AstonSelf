@@ -1,13 +1,20 @@
 package org.example.repository;
 
 import org.example.model.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+//import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findById(Long id);
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
+
+    boolean existsById(Long id);
     boolean existsByEmail(String email);
+
+    void deleteById(Long id);
 }

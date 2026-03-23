@@ -7,7 +7,12 @@ public record UserUpdateRequestDTO(
     String username,
     String email,
     Integer age
-) {
+) implements RequestDTO {
+    @Override
+    public boolean isValid() {
+        return false;
+    }
+
     public User toEntity() {
         return new User(username, email, age);
     }
