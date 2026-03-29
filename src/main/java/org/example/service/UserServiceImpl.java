@@ -2,12 +2,17 @@ package org.example.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.config.KafkaConfig;
+import org.example.model.data.Notification;
+import org.example.model.data.UserOperation;
 import org.example.model.dto.UserRequestDTO;
 import org.example.model.dto.UserResponseDTO;
 import org.example.model.dto.UserUpdateRequestDTO;
 import org.example.model.entity.User;
 import org.example.model.result.Result;
+import org.example.producer.KafkaProducer;
 import org.example.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +27,18 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
+    private final KafkaProducer kafkaProducer;
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+        KafkaConfig kafkaConfig = new KafkaConfig();
+        this.kafkaProducer = new KafkaProducer(kafkaConfig.kafkaTemplate(), kafkaConfig.objectMapper());
+    }
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, KafkaProducer kafkaProducer) {
+        this.userRepository = userRepository;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -46,6 +60,9 @@ public class UserServiceImpl implements UserService {
         }
 
         logger.info("User created successfully with email: {}", savedUser.getEmail());
+
+        kafkaProducer.sendMessage(new Notification(UserOperation.CREATE,savedUser.getEmail()));
+
         return Result.success(UserResponseDTO.fromEntity(savedUser));
     }
 
@@ -111,8 +128,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result<Boolean> deleteUser(Long id) {
         if (userRepository.existsById(id)) {
+            Optional<User> user = userRepository.findById(id);
             userRepository.deleteById(id);
             logger.info("User deleted successfully with id: {}", id);
+
+            kafkaProducer.sendMessage(new Notification(UserOperation.DELETE, user.get().getEmail()));
+
             return Result.success(true);
         }
         logger.info("User not found by id: {}", id);

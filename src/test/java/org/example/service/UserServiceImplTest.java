@@ -173,10 +173,12 @@ public class UserServiceImplTest {
         user.setId(userId);
 
         when(userRepository.existsById(userId)).thenReturn(true);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         userService.deleteUser(userId);
 
         verify(userRepository).existsById(userId);
+        verify(userRepository).findById(userId);
         verify(userRepository).deleteById(user.getId());
     }
 
