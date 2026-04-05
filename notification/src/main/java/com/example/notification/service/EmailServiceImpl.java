@@ -1,8 +1,8 @@
 package com.example.notification.service;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
     private static final Logger logger = LogManager.getLogger(EmailServiceImpl.class);
     private final JavaMailSender mailSender;
-    private final String fromEmail;
+
+    @Value("${from.email}")
+    private String fromEmail;
 
     public EmailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-        this.fromEmail = "denisgm2003@gmail.com";
     }
 
     public void sendAccountCreationEmail(String toEmail) {

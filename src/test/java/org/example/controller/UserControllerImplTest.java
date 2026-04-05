@@ -72,17 +72,6 @@ public class UserControllerImplTest {
             .andExpect(jsonPath("$.username").value("example-user"));
     }
 
-//    @Test
-//    void getUserById_WhenUserNotFound() throws Exception {
-//        when(userService.getUserById(100L)).thenReturn(
-//            Result.failure(Arrays.asList())
-//        );
-//
-//        mockMvc.perform(get("/api/users/{id}", 100L)
-//                .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isInternalServerError());
-//    }
-
     @Test
     void getUserByEmail_WhenUserExists() throws Exception {
         when(userService.getUsersByEmail("example-user@example.com")).thenReturn(Result.success(UserResponseDTO.fromEntity(testUser)));

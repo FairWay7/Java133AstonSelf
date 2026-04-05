@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.model.data.Notification;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaProducer {
     private static final Logger logger = LogManager.getLogger(KafkaProducer.class);
-    private static final String TOPIC = "t.notification";
+
+    @Value("${kafka.topic}")
+    private String topic;
 
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -23,8 +26,12 @@ public class KafkaProducer {
 
     public boolean sendMessage(Notification notification) {
         try {
+            if (kafkaTemplate == null) {
+                logger.warn("Kafka is not available, message not sent: {}", notification);
+                return false;
+            }
             String orderAsMessage = objectMapper.writeValueAsString(notification);
-            kafkaTemplate.send(TOPIC, orderAsMessage);
+            kafkaTemplate.send(topic, orderAsMessage);
 
             logger.info("Notification produced {}", orderAsMessage);
         }

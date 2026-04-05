@@ -38,6 +38,10 @@ public class KafkaConfig {
         config.put(ProducerConfig.ACKS_CONFIG, "all");
         config.put(ProducerConfig.RETRIES_CONFIG, 3);
 
+        config.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, 5000);
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 3000);
+        config.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, 10000);
+
         return new DefaultKafkaProducerFactory<>(config);
     }
 

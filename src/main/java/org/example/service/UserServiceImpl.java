@@ -1,7 +1,5 @@
 package org.example.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.example.config.KafkaConfig;
 import org.example.model.data.Notification;
 import org.example.model.data.UserOperation;
@@ -12,6 +10,8 @@ import org.example.model.entity.User;
 import org.example.model.result.Result;
 import org.example.producer.KafkaProducer;
 import org.example.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final KafkaProducer kafkaProducer;
 

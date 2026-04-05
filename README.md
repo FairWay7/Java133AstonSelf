@@ -1,6 +1,7 @@
-## Домашнее задание №1
-Основной файл - hm1/CustomHashMap
-Тесты - hm1/CustomHashMapTest
+Запуск Kafka: docker-compose up
 
-## Домашнее задание №3
-Тесты для домашнего задания 2 лежат по пути "test\java\org\example\hm2"
+Kafka: http://localhost:9000/
+
+Swagger: http://localhost:8080/swagger-ui/index.html
+
+Api-docs: http://localhost:8080/v3/api-docs

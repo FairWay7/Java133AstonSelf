@@ -12,7 +12,6 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class KafkaConsumer {
     private static final Logger logger = LogManager.getLogger(KafkaConsumer.class);
-    private static final String TOPIC = "t.notification";
     private final NotificationService notificationService;
     private final ObjectMapper objectMapper;
 
@@ -21,7 +20,10 @@ public class KafkaConsumer {
         this.objectMapper = objectMapper;
     }
 
-    @KafkaListener(topics = TOPIC, groupId = "my-group")
+    @KafkaListener(
+        topics = "${kafka.topic}",
+        groupId = "${kafka.consumer.group-id}"
+    )
     public void listen(String message) {
         logger.info("Received message: {}", message);
         NotificationDTO not = objectMapper.readValue(message, NotificationDTO.class);
