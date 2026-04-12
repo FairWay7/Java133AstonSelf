@@ -1,0 +1,18 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/FairWay7/Java133AstonSelf
+          default-label: main
+          search-paths: '{application}'
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

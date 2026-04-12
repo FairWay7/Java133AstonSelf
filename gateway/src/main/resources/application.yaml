@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notification/**
+
+# Настройки Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      userServiceCB:
+        register-health-indicator: true
+        sliding-window-size: 10          # Количество запросов для анализа
+        minimum-number-of-calls: 5       # Минимум вызовов перед анализом
+        wait-duration-in-open-state: 10s # Время ожидания перед попыткой восстановления
+        failure-rate-threshold: 50       # Порог ошибок для размыкания (50%)
+      notificationServiceCB:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 5s
+        failure-rate-threshold: 40
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway,health, info
