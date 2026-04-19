@@ -1,7 +1,5 @@
-Запуск Kafka: docker-compose up
+docker-compose down
 
-Kafka: http://localhost:9000/
+docker-compose build --no-cache
 
-Swagger: http://localhost:8080/swagger-ui/index.html
-
-Api-docs: http://localhost:8080/v3/api-docs
+docker-compose up
