@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/notifications")
-@RequiredArgsConstructor
-public class NotificationController {
+public class NotificationControllerImpl {
     private final NotificationService notificationService;
+
+    public NotificationControllerImpl(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
     @PostMapping("/send")
     public ResponseEntity<Void> sendEmailNotification(@RequestBody NotificationDTO request) {

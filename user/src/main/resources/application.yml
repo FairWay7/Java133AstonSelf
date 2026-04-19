@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: user-service
+
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/usersdb
+    username: postgres
+    password: denis
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8088
+
+kafka:
+  topic: t.notification
+  consumer:
+    group-id: my-group
+
+producer:
+  properties:
+    max.block.ms: 5000
+    request.timeout.ms: 3000
+    delivery.timeout.ms: 10000
+
+eureka:
+  client:
+    enabled: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
