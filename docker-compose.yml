@@ -134,14 +134,9 @@ services:
     build: ./user
     container_name: user-service
     depends_on:
-      kafka:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
+      - kafka
+      - eureka-server
+      - postgres
     ports:
       - "8081:8081"
     environment:
@@ -165,12 +160,8 @@ services:
     build: ./notification
     container_name: notification-service
     depends_on:
-      kafka:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      config-server:
-        condition: service_healthy
+      - kafka
+      - eureka-server
     ports:
       - "8082:8082"
     environment:

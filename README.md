@@ -8,3 +8,5 @@ docker-compose down
 - Eureka Dashboard: http://localhost:8761
 - Kafdrop (Kafka UI): http://localhost:9000
 - PostgreSQL: localhost:5432
+- User-service: http://localhost:8081/
+- Notification-service: http://localhost:8082/
