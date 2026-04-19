@@ -17,7 +17,7 @@ spring:
     show-sql: true
 
 server:
-  port: 8088
+  port: 8081 #8088
 
 kafka:
   topic: t.notification
