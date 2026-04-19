@@ -16,7 +16,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.5</version>
+		<version>3.2.12</version>
+<!--		<version>3.2.12</version>-->
 		<relativePath/>
 	</parent>
 
@@ -25,7 +26,11 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 
-		<spring-cloud.version>2022.0.4</spring-cloud.version>
+<!--		<spring.version>3.1.5</spring.version>-->
+		<spring.version>3.2.12</spring.version>
+
+		<spring-cloud.version>2023.0.1</spring-cloud.version>
+<!--		<spring-cloud.version>2022.0.4</spring-cloud.version>-->
 
 		<!-- Database -->
 		<postgresql.version>42.6.0</postgresql.version>
@@ -82,16 +87,17 @@
 
 	<dependencyManagement>
 		<dependencies>
+
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-data-jpa</artifactId>
-				<version>3.1.5</version>
+				<version>${spring.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-hateoas</artifactId>
-				<version>3.1.5</version>
+				<version>${spring.version}</version>
 			</dependency>
 
 			<dependency>
@@ -103,33 +109,33 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
-				<version>3.1.5</version>
+				<version>${spring.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-actuator</artifactId>
-				<version>3.1.5</version>
+				<version>${spring.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-test</artifactId>
-				<version>3.1.5</version>
+				<version>${spring.version}</version>
 				<scope>test</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-data-jpa-test</artifactId>
-				<version>3.1.5</version>
+				<version>${spring.version}</version>
 				<scope>test</scope>
 			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-hateoas-test</artifactId>
-				<version>3.1.5</version>
+				<version>${spring.version}</version>
 				<scope>test</scope>
 			</dependency>
 
@@ -205,6 +211,11 @@
 				<version>${testcontainers.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.jboss.logging</groupId>
+				<artifactId>jboss-logging</artifactId>
+				<version>3.5.1.Final</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -219,10 +230,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-autoconfigure</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-commons</artifactId>
@@ -234,10 +245,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
 		</dependency>
 	</dependencies>
 

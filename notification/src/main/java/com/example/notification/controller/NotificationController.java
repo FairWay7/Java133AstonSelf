@@ -1,6 +1,5 @@
 package com.example.notification.controller;
 
-
 import com.example.notification.model.dto.NotificationDTO;
 import com.example.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
